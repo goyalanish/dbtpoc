@@ -1,0 +1,31 @@
+version: 2
+## Generic Tests
+models:
+  - name: dim_listings_cleansed
+    columns:
+## Unique and not null tests
+     - name: listing_id
+       tests:
+         - unique
+         - not_null
+## Referential Integrity Test
+     - name: host_id
+       tests:
+         - not_null
+         - relationships:
+             to: ref('dim_hosts_cleansed')
+             field: host_id
+## List of Values test
+     - name: room_type
+       description: Type of the apartment / room
+       tests:
+         - accepted_values:
+             values: ['Entire home/apt',
+                      'Private room',
+                      'Shared room',
+                      'Hotel room']
+## Custom Generic Test
+     - name: minimum_nights
+       description: '{{ doc("dim_listing_cleansed__minimum_nights") }}'
+       tests:
+        - positive_value
